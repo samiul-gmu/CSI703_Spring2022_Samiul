@@ -1,28 +1,22 @@
 #%%
+# import relevant package(s)
 import geopandas as gpd
 import pandas as pd
 import numpy as np
-#import folium
-#from folium.plugins import StripePattern
-#import streamlit as st
-#from streamlit_folium import folium_static
 
-#page = st.radio(
-#    "Select map type", ["Single map", "Dual map", "Branca figure"], index = 0
-#)
 
 #%%
-# Reading Shapefile
+# read Shapefile
 world_map = gpd.read_file("../Assignments/Assignment5_6_8_9_10_11_12/Data/Shapefile_World/world-administrative-boundaries.shp")
 
 
 #%%
-# Reading Covid Data
+# read Covid Data
 covid_data = pd.read_csv ('../Assignments/Assignment5_6_8_9_10_11_12/Data/COVID-19 Cases.csv')
-# We have covid data from one source and the shapefile from another.
-# Between these sources, we need country names to join them before we can generate geo-plots.
-# However, these two sources have some mismatch that we are handling manually so that we can join them.
-#covid_data.iloc[85017]['Country_Region'] = 'United States of America'
+# we have covid data from one source and the shapefile from another.
+# between these sources, we need country names to join them before we can generate geo-plots.
+# however, these two sources have some mismatch that we are handling manually so that we can join them.
+# covid_data.iloc[85017]['Country_Region'] = 'United States of America'
 covid_data['Country_Region'] = covid_data['Country_Region'].str.replace("Antigua and Barbuda", "Antigua & Barbuda")
 covid_data['Country_Region'] = covid_data['Country_Region'].str.replace("Bosnia and Herzegovina", "Bosnia & Herzegovina")
 covid_data['Country_Region'] = covid_data['Country_Region'].str.replace("Brunei", "Brunei Darussalam")
@@ -48,7 +42,7 @@ covid_data['Country_Region'] = covid_data['Country_Region'].str.replace("US", "U
 covid_data['Country_Region'] = covid_data['Country_Region'].str.replace("United Kingdom", "U.K. of Great Britain and Northern Ireland")
 
 #%%
-# An helper section to ID the max values for confirmed cases and deaths during the entire timeframe
+# helper section to ID the max values for confirmed cases and deaths during the entire timeframe
 date = np.unique(np.array(list(covid_data['Date'])))
 world_map_country_name = list(world_map['name'])
 world_map_country_name.sort()
@@ -108,7 +102,7 @@ for d in range(0, len(date)):
     print('Completed:', d,'/',len(date))
 
 #%%
-# Finding out max of confirmed and death cases per day for the entire period
+# calculate max of confirmed and death cases per day for the entire period
 maxCountConfirmed = 0
 maxCountDeaths = 0
 for d in date:
@@ -121,7 +115,7 @@ for d in date:
 print(maxCountConfirmed, maxCountDeaths)
 
 #%%
-#Using 'Cook Islands' to uniform color in between diff. days.
+# use 'Cook Islands' to uniform color in between diff. days.
 date = np.unique(np.array(list(covid_data['Date'])))
 country = np.unique(np.array(list(covid_data['Country_Region'])))
 world_map_country_name = list(world_map['name'])
@@ -186,19 +180,14 @@ for d in range(0, len(date)):
     
 
 #%%
+# dump datewise_data and world_map data using pickle
 import pickle
 
-with open('datewise_data.pickle', 'wb') as f:
+with open('Data_Backup/datewise_data.pickle', 'wb') as f:
     pickle.dump(datewise_data, f)
     
-with open('world_map.pickle', 'wb') as f:
+with open('Data_Backup/world_map.pickle', 'wb') as f:
     pickle.dump(world_map, f)
 
-#%%
-with open('datewise_data.pickle', 'rb') as handle:
-    b = pickle.load(handle)
-    
-with open('world_map.pickle', 'rb') as handle:
-    c = pickle.load(handle)
-    
-print(c)
+with open('Data_Backup/date.pickle', 'wb') as f:
+    pickle.dump(date, f)
