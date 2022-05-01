@@ -17,7 +17,7 @@ with c2:
     # "Select a date:",
     # datetime.date(2020, 1, 22))
     d = st.slider(
-     "When do you start?",
+     "Select a date:",
     datetime.date(2020, 1, 22),
     datetime.date(2020, 3, 29),
     datetime.date(2020, 1, 22),
