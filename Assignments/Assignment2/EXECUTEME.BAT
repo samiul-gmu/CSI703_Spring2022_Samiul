@@ -1,2 +1,2 @@
-powershell -Command "streamlit run "streamlitTest.py""
+powershell -Command "streamlit run 'streamlitTest.py'"
 pause
