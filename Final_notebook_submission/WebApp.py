@@ -2,6 +2,8 @@ import streamlit as st
 #import streamlit.components.v1 as components
 import pandas as pd
 import plotly.express as px
+import matplotlib.pyplot as plt
+
 
 
 st.set_page_config(layout = 'wide')
@@ -37,3 +39,26 @@ if (option == 'Correlation, comparisons, and trends'):
                                      color_continuous_midpoint=6, width=1500, height=800,
                                       title="Relations between weather/dryness variables while grouping them by month")
         st.plotly_chart(fig)
+        
+elif (option == 'Distributions and part-to-whole'):
+    df = pd.read_excel('Assignment_Files/Data/forestfires.xlsx')
+    df_sum = df.groupby(['month']).sum()
+    df_pie_plot = df_sum[['wind', 'area']]
+    months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    df_pie_plot = df_pie_plot.loc[months]
+    x = df_pie_plot.index.tolist()
+    y = df_pie_plot['area'].tolist()
+    percent = [100*ey / sum(y) for ey in y]
+    colors = ['lightcoral','lightskyblue','yellow','yellowgreen','grey','pink','blue','darkgreen','cyan','magenta','violet','gold']
+    patches, texts = plt.pie(y, colors = colors, counterclock=False, startangle=-270, radius=1)
+    labels = ['{0} - {1:1.2f} %'.format(i,j) for i,j in zip(x, percent)]
+    plt.title('Part-to-whole Distribution of\nForest Fire', loc='center',fontsize=12)
+    
+    plt.legend(patches, labels, title = 'Month', loc='center', bbox_to_anchor=(-0.1, 1.),
+               fontsize=9)
+    st.pyplot(plt)
+elif (option == 'Geospatial'):
+    pass
+elif (option == 'Concepts and qualitative'):
+    pass
+    
